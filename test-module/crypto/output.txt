@@ -1,0 +1,76 @@
+> lua ./module/crypto.lua
+crypto lib test
+input message: 'Hello World 12345'
+
+hash functions (hex)
+  sha256: d289d21979ebc1208a0d2828c80b5bb6b1469ea35ac20068a3e4329975beaa5f ok
+  sha1: 6ea9ad7434980eba223975cec7ac749725f70dbf ok
+  md5: 1f7a99a1f2175acd32c06f8ba0c1001b ok
+  sha3-224: 863aa3a2fa82da3faddde818f2e18d0bd64901f0331da4536b20f303 ok
+  sha3-256: e5c395951b473c0dd3891cfad4bf858b7101fd1ab37febd1a5ddfe2a7300142f ok
+  sha3-384: 7d4ba24aa082fc94fcba1f281b71a1df728d83609693bd8d72189ec84711bb6ad4379720ca46511aaf5856b71511aa7d ok
+  sha3-512: 33c9860faf07ec00379133aa4f22a45407a73f886c19579d3003b6bbf0381feb1c74a32d383ab956c3f16ecaf2aa14ae3918e78fd852043338efc7a27cbbfc19 ok
+  keccak256: 224949178ccb7bb8bc930d1a7046e0cf8a1486ad6cd793e2ab314ef8fa89b7fb ok
+  shake128 (32 bytes): e130776f6c7db963299bdf16f7711eecb7dc71111bd6fb02bcd46bb738a338d8 ok
+  shake256 (32 bytes): 9fb5fd7aa337515d1232e557367e433d944fec24f3dd5d4e7119566a917f26c2 ok
+
+hmac (hex)
+  hmac-sha256: 318636a2257d87ba8d80f15c59268e4e3311b8b4fed42c0718d6ecebd584bb50 ok
+
+buffer operations
+  buffer.from / tostring: ok
+  base64 encode/decode: SGVsbG8gV29ybGQgMTIzNDU= -> Hello World 12345
+    result: ok
+  hex encode/decode: 48656c6c6f20576f726c64203132333435 -> Hello World 12345
+    result: ok
+  slice first 5 chars: 'Hello' ok
+
+random generation (length check only)
+  randombytes(16): len=16 ok
+  randombytes(32): len=32 ok
+  uuid v4: 7360470c-c212-45cf-8516-7e3872bd1749 ok
+  uuid v1: 007ef400-0000-1000-a225-d11fb53c267f ok
+
+symmetric encryption (xor, aes-cbc, aes-ecb, aes-ctr)
+  xor cipher: enc=2300155d5d133c0a0b5d56135a574a0507
+    decrypted: 'Hello World 12345' ok
+  aes-128-cbc: enc=71cdcb1f18320012b4b3f80a44f214ee15ae3c7dc6697fe12818c2a6a5382413
+    decrypted: 'Hello World 12345' ok
+  aes-256-cbc: enc=1063c63c329f5f24fa4c6b13de13476b70a779ca8340999a69d744da3d36680a
+    decrypted: 'Hello World 12345' ok
+  aes-128-ecb: enc=b84530f1d7732f84b29e362e55036d727183e774e3a9bbb657a0f7087dfdc198
+    decrypted: 'Hello World 12345' ok
+  aes-256-ctr: enc=9af60b619ee5ebbbc5770e143cf18a5c4e7dbd4fd75f
+    decrypted: 'AES-CTR streaming test' ok
+
+aes-gcm (authenticated encryption)
+  aes-256-gcm: enc=b3242a5f187a2f226089dc16df8ddfabbc, tag=87a2b33b7c6da3e1e290e0b8df1fb0d5
+    decrypted: 'Hello World 12345' ok
+    tamper detection: ok (rejected)
+
+chacha20-poly1305
+  chacha20-poly1305: enc=72448dbae2be37b114a8e2018b71b7327c, tag=2522b624af076f0eb916f953581c6ad2
+    decrypted: 'Hello World 12345' ok
+
+chacha20 stream cipher
+  chacha20: enc=1f550638efe56a678b02eef3ec2ce980675b8bc865899f
+    decrypted: 'ChaCha20 stream example' ok
+
+ecdh & ecdsa
+  ecdh shared secret: match ok
+    alice: a9a139fa4a5782adc15001c60ab9d132819fbde8ca2e32ab2048894642ebfcce
+    bob:   a9a139fa4a5782adc15001c60ab9d132819fbde8ca2e32ab2048894642ebfcce
+
+ecdsa (using separate key pair)
+  ecdsa verify: ok
+    signature r=2e8a5d985c5eb14b7476bb5762cabcd1507b1ee1401edb1a22267f5f31b99d8a, s=32517d9f5db67a95c1b1bd258f8e73033f359ee0f909436c90ead6c93b169b49
+
+base32 & crc32
+  base32: 'test123' -> 'ORSXG5BRGIZQ====' -> 'test123' ok
+  crc32: 0x91c102ca
+
+constant time compare
+  compare equal: ok
+  compare different: ok
+
+done
